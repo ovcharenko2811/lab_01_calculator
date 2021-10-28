@@ -1,47 +1,79 @@
 package lesson1;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Calculator {
 
     /*To calculate integers "a" and "b" */
-    public static void main(String[] args) throws Exception {
-        int a ;
-        int b ;
-        int result;
-        String operator;
+    public static void main(String[] args) {
 
-        Scanner sc = new Scanner(System.in);
+        BufferedReader scanner = new BufferedReader(new InputStreamReader(System.in));
+        String userInput = "";
+        while (!"q".equals(userInput)) {
+            try {
+                System.out.println("Введите первое число!");
+                int firstNumber = Integer.parseInt(scanner.readLine());
+                System.out.println("Введите второе число!");
+                int secondNumber = Integer.parseInt(scanner.readLine());
+                System.out.println("Введите оператор!");
+                userInput = scanner.readLine();
+                double result;
 
-        try {
-            a = sc.nextInt();
-        } catch (InputMismatchException | IllegalStateException  e) {
-            System.out.println("Некорректное первое значение. Введите целое число");
-            return;
+                switch (userInput) {
+                    case "+" -> result = plus(firstNumber, secondNumber);
+                    case "-" -> result = minus(firstNumber, secondNumber);
+                    case "*" -> result = ymn(firstNumber, secondNumber);
+                    case "/" -> {
+                        if (secondNumber == 0) {
+                            System.out.println("На ноль делить нельзя!");
+                            continue;
+                        }
+                        result = del(firstNumber, secondNumber);
+                    }
+                    case "!" -> result = fact(firstNumber);
+                    default -> {
+                        System.out.println("Неправильный оператор!");
+                        result = 0;
+                    }
+                }
+
+
+                System.out.println("Результат операции: " + result);
+            } catch (InputMismatchException | IOException | NumberFormatException ex) {
+                System.out.println("Неправильный инпут!");
+
+            }
+
         }
-
-        try {
-            operator = sc.nextLine();
-        } catch (InputMismatchException | IllegalStateException  e) {
-            System.out.println("Некорректное значение. Введите один из допустимых оператор (+-*/)");
-            return;
-        }
-        try {
-            b = sc.nextInt();
-        } catch (InputMismatchException | IllegalStateException  e) {
-            System.out.println("Некорректное второе значение. Введите целое число");
-            return;
-        }
-
-        result = switch (operator) {
-            case "+" -> a + b;
-            case "-" -> a - b;
-            case "*" -> a * b;
-            case "/" -> a / b;
-            default -> throw new Exception("Некорректный инпут. Введите один из допустимых операторов (+-*/)");
-        };
-
-        System.out.println(result);
     }
+
+    private static int plus(int numberOne, int numberTwo) {
+        return numberOne + numberTwo;
+    }
+
+    private static int minus(int numberOne, int numberTwo) {
+        return numberOne - numberTwo;
+    }
+
+    private static int ymn(int numberOne, int numberTwo) {
+        return numberOne * numberTwo;
+    }
+
+    private static int del(int numberOne, int numberTwo) {
+        return numberOne / numberTwo;
+    }
+
+    private static int fact(int numberOne) {
+        int res = 1;
+        for (int i = 1; i < numberOne; i++) {
+            res *= i;
+        }
+
+        return res;
+    }
+
 }
